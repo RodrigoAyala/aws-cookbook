@@ -22,3 +22,8 @@
     value node['envs'][var]
   end
 end
+
+  magic_shell_environment 'TEST' do
+    value 'TESTVAL'
+  end
+
