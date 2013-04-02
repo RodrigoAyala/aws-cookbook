@@ -19,11 +19,13 @@
 
 ['RDS_DB_NAME','RDS_USERNAME','RDS_PASSWORD','RDS_HOSTNAME','RDS_PORT','AWS_ACCESS_KEY_ID', 'AWS_SECRET_KEY'].each do |var|
   magic_shell_environment var do
+    action :add
     value node['envs'][var]
   end
 end
 
   magic_shell_environment 'TEST' do
+    action :add
     value 'TESTVAL'
   end
 
