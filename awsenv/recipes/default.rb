@@ -24,8 +24,38 @@
   end
 end
 
-  magic_shell_environment 'TEST' do
-    action :add
-    value 'TESTVAL'
-  end
+file_contents = "conf = HtmlPod::Application.config
+  conf.s3_bucket = #{node['envs']['S3BUCKET']}
+  conf.s3_credentials = {
+    access_key_id: #{node['envs']['AWS_ACCESS_KEY_ID']},
+    secret_key:    #{node['envs']['AWS_SECRET_KEY']}
+  }"
 
+resource = file "/srv/www/#{node['envs']['APP']}/current/config/initializers/s3.rb" do
+  owner "deploy"
+  group "root"
+  mode "0644"
+  content file_contents
+  action :nothing
+end
+
+resource.run_action(:create)
+
+file_contents = "production:
+  adapter: mysql2
+  encoding: utf8
+  database: #{node['envs']['RDS_DB_NAME']}
+  username: #{node['envs']['RDS_USERNAME']}
+  password: #{node['envs']['RDS_PASSWORD']}
+  host:  #{node['envs']['RDS_HOSTNAME']}
+  port:  #{node['envs']['RDS_PORT']}"
+
+resource = file "/srv/www/#{node['envs']['APP']}/current/config/database.yml" do
+  owner "deploy"
+  group "root"
+  mode "0660"
+  content file_contents
+  action :nothing
+end
+
+resource.run_action(:create)
