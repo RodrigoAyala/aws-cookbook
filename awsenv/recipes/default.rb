@@ -30,7 +30,7 @@ file_contents = "conf = HtmlPod::Application.config
     access_key_id: #{node['envs']['AWS_ACCESS_KEY_ID']},
     secret_key:    #{node['envs']['AWS_SECRET_KEY']}
   }"
-resource = file "/srv/www/#{node['envs']['APP']}/current/config/initializers/s3.rb" do
+resource = file "/srv/www/#{node['envs']['APP']}/current/config/initializers/01_s3.rb" do
   owner "deploy"
   group "root"
   mode "0644"
